@@ -1,0 +1,49 @@
+<html>
+<head>
+<link href="../css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+
+<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap-3.1.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+// Support for AJAX loaded modal window.
+// Focuses on first input textbox after it loads the window.
+$('[data-toggle="modal"]').click(function(e) {
+	e.preventDefault();
+	var url = $(this).attr('href');
+	if (url.indexOf('#') == 0) {
+		$(url).modal('open');
+	} else {
+		$.get(url, function(data) {
+			$('<div class="modal hide fade">' + data + '</div>').modal();
+		}).success(function() { $('input:text:visible:first').focus(); });
+	}
+});
+	
+});
+</script>
+</head>
+<body>
+<a href="modal_window.htm" data-toggle="modal">link</a>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
