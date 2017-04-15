@@ -37,6 +37,7 @@ $(document).ready(function() {
    <!-- a href="subcategoria.html" style="background-color:#5A66F2" class="list-group-item"> <h5 style="color:#ffffff"> Subcategor�as</h5></a>    -->
    <a href="producto.php" style="background-color:#153CFF" class="list-group-item"> <h5 style="color:#ffffff"> Productos</h5></a>
    <a href="clientes.php" style="background-color:#153CFF" class="list-group-item"><h5 style="color:#ffffff"> Clientes</h5></a>
+   <a href="ventas.php"   style="background-color:#153CFF" class="list-group-item"> <h5 style="color:#ffffff"> Ventas </h5></a>
    <!--a href="#" style="background-color:#153CFF" class="list-group-item"> <h5 style="color:#ffffff"> Whatsapp</h5></a>
    <a href="#" style="background-color:#153CFF" class="list-group-item"> <h5 style="color:#ffffff"> Plantillas </h5></a-->
   </div>

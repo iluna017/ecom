@@ -174,6 +174,10 @@
 				id="cmbCategorias" name="cmbCategorias"
 				onchange="loadProductosBtn();"></select>
 			</div>
+					<div class="rowDiv col-xs-12">
+							<label id="nombreLabel" name="nombreLabel">Activo S/N:</label>
+							<input type="checkbox" id="activoSN" name="activoSN">
+						</div>
 			<div class="backtable center">
 				<table class="table table-hover" id="tabla-productos"
 				name="tabla-productos">

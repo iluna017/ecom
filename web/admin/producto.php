@@ -235,7 +235,7 @@
 	});
 
 	function getIdTienda() {
-		var data = execAjax("", "POST", "text", "json/store.json");
+		var data = execAjax("", "POST", "text", "../json/store.json");
 		var json = $.parseJSON(data);
 		var idTienda = json.Tienda.IdTienda;
 		$('#idTienda').val(idTienda);
