@@ -96,6 +96,12 @@
 			<textarea class="form-control" id="descripcion" name="descripcion"
 				placeholder="Descripción" maxlength="250" cols="60" rows="3"></textarea>
 		</div>
+			<div class="col-xs-12">
+			<label for="inputEmail3">Logotipo</label>
+			 <table class="table table-bordered" id="tabla-logo" name="tabla-logo">
+    		<tr><td><input type="file" id="logotipo" name="logotipo" onchange="logotipoBtn()" style="font-size: 12px;"></td></tr>
+			</table>
+		</div>
 		<div class="col-xs-12">
 			<label for="inputEmail3">Imágenes de Inicio</label> 
 			<table class="table table-bordered" id="tabla-imagenes" name="tabla-imagenes">
@@ -105,7 +111,6 @@
 			<tr><td><input type="file" id="slideIn_4" name="slideIn_4" onchange="slideStoreBtn(4)" style="font-size: 12px;"></td></tr>
 			</table>
 		</div>
-			
 		<div class="col-xs-12">
 			<div style="float: right">
 				<button type="button" class="btn btn-success" data-dismiss="modal"
@@ -125,6 +130,7 @@
 		var idTienda = getIdTienda();
 		loadDatosTienda(idTienda);
 		obtenSlidersStore(idTienda);
+		obtenLogoStore(idTienda);
 	});
 
 	function loadDatosTienda(idTienda) {
@@ -214,11 +220,11 @@
 			modal("Mensaje",data["MSG"]);
 		}		
 	}
-	function agregarSlider(idStore,imagen){
+	function agregarSlider(idStore,imagen,tipoImagen){
 		var params = {  
 				operations:[{
 				operation : 'insertar',
-				tableName : 'slidertienda',
+				tableName : tipoImagen,
 				paramNames : 'IdTienda,Nombre',
 				values : '(\''+idStore + '\',\'' + imagen+'\')' }
 				]};
@@ -235,8 +241,25 @@
 			setTimeout(function(){borrarSliderHtml(trId,idSlider,nombre)},1000);
 		}
 	}
+	function borrarLogo(ref,idLogo,nombre){
+		var trId=$(ref).closest('tr').attr('id');
+		if(confirm('Esta seguro de eliminar esta imagen ['+nombre+']')){
+			waitingDialog.show('Borrando Logo...');
+			setTimeout(function(){borrarLogoHtml(trId,idLogo,nombre)},1000);
+		}
+	}
+	
+	function borrarLogoHtml(trId,idSlider,nombre){
+		var data=borrarSliderDB(idSlider,nombre,'logotienda','IdLogo');
+		if(data["MSG"].indexOf('Error')== -1){
+			modal("Mensaje",data["MSG"]);
+			fileInput='<td><input type="file" id="logotipo" name="logotipo" onchange="logoStoreBtn()" style="font-size: 12px;"></td>'
+			$('tr[id="'+trId+'"]').html(fileInput);
+		}
+	}
+	
 	function borrarSliderHtml(trId,idSlider,nombre){
-		var data=borrarSliderDB(idSlider,nombre);
+		var data=borrarSliderDB(idSlider,nombre,'slidertienda','IdSlider');
 		if(data["MSG"].indexOf('Error')== -1){
 			modal("Mensaje",data["MSG"]);
 			fileInput='<td><input type="file" id="slideIn_'+trId+'" name="slideIn_'+trId+'" onchange="slideStoreBtn('+trId+')" style="font-size: 12px;"></td>'
@@ -246,13 +269,13 @@
 			}	
 		}
 	}
-	function borrarSliderDB(idSlider,nombre){
+	function borrarSliderDB(idSlider,nombre,tabla,id){
 		var params = {  
 			oper : 'borraSlider',
 			slider:{
 			 operation : 'delete',
-			 tableName : 'slidertienda',
-			     where : 'IdSlider="'+idSlider+'"',
+			 tableName : tabla,
+			     where : id+'="'+idSlider+'"',
 			sliderPath : '../images/Sliders/'+nombre
 			}
 		};
@@ -304,8 +327,38 @@
 		indexList = index-1;
 		modal('Imagen',imagen);
 	}
+
+	function verLogo(idLogo,nombreLogo,index){
+		var d = new Date();
+		var imagen='<img align="middle" id="imagen" name="imagen" width="260" height="260" src="../images/Logos/'+nombreLogo+'?'+d.getTime()+'">';
+		imagen+='<img class="rotate" src="images/redo.png" width="100" height="100" onclick=\'rotate("imagen","Logos/'+nombreLogo+'")\'>';
+		modal('Imagen',imagen);
+	}
 	
-	
+	function obtenLogoStore(idStore){
+		var params = {  
+				operations:[{
+				operation : 'select',
+				tableName : 'logotienda',
+				columnNames : 'IdTienda,IdLogo,Nombre',
+				where : 'IdTienda='+ idStore+' order by Nombre'}]
+		};
+		var myJSONText = JSON.stringify(params);
+		var data = execAjax(myJSONText, "POST", "json","../phpControllers/dbController.php");
+		var fileInput='';
+		var actionSee='';
+		var actionDelete='';
+		if(data.length>0){
+			cleanTable('tabla-logo');
+			tabla=$('#tabla-logo');
+			tr = $('<tr id="1" name="1"></tr>');
+			nombre='<td>'+data[0]["Nombre"]+'</td>';
+			actionDelete="<td><a href='#' onclick='borrarLogo(this,"+data[0]['IdLogo']+",\""+data[0]['Nombre']+"\")'><img  width='30' height='30' src='images/delete.png'></a></td>";
+			actionSee = "<td><a href='#' onclick=\"verLogo("+data[0]['IdLogo']+",'"+data[0]['Nombre']+"',"+1+")\"><img  width='30' height='30' src='images/see2.png'></a></td>";
+			tr.append(nombre+actionSee+actionDelete);
+			tabla.append(tr);
+		}
+	}
 	
 	function obtenSlidersStore(idStore){
 		var params = {  
@@ -343,6 +396,13 @@
 			}
 		}
 	}
+
+	function logoStoreBtn(){
+		waitingDialog.show('Agregando Logo...');
+			setTimeout(function() {
+				logoStore();
+			}, 1000);
+	}
 	
 	function slideStoreBtn(counter){
 		waitingDialog.show('Agregando Slider...');
@@ -350,6 +410,47 @@
 				slidesStore(counter);
 			}, 1000);
 	}
+	
+	function logoStore() {
+		var imagesPath="../images/Logos";
+		var result = '';
+		var formdata = new FormData();
+		var sampleFile = $('#logo').prop("files")[0];
+		var sliderName=$('#logo').prop("files")[0].name;
+		var ext=sliderName.substring(sliderName.lastIndexOf('.')+1,sliderName.length);
+		var filename = 'Logotipo'+'.'+ext;
+		formdata.append("file", sampleFile);
+		formdata.append("path", imagesPath);
+		formdata.append("name", filename);
+		$.ajax({
+			data : formdata,
+			type : "POST",
+			enctype : "multipart/form-data",
+			url : "../phpServices/uploadService.php",
+			cache : false,
+			processData : false,
+			contentType : false,
+			async : false,
+			success : function(data) {
+				result=agregarSlider($('#idTienda').val(), filename,'logotienda');
+				nombre='<td>'+filename+'</td>';
+				if(result.length > 0){
+					actionDelete="<td><a href='#' onclick='borrarLogo(this,"+result["ID"]+",\""+filename+"\")'><img  width='30' height='30' src='images/delete.png'></a></td>";
+					actionSee = "<td><a href='#' onclick=\"verSlider("+result["ID"]+",'"+filename+"',"+(counter-1)+")\"><img  width='30' height='30' src='images/see2.png'></a></td>";
+					$('tr[id="'+(counter)+'"]').html(nombre+actionSee+actionDelete);
+				}
+				waitingDialog.hide();
+			},
+			error : function(jqXHR, exception, error) {
+				waitingDialog.hide();
+				//alert("error:"+jqXHR.responseText);
+				alert(error);
+				result = '';
+			}
+		});
+		return result;
+	}
+	
 	
 	function slidesStore(counter) {
 		var imagesPath="../images/Sliders";
@@ -372,7 +473,7 @@
 			contentType : false,
 			async : false,
 			success : function(data) {
-				result=agregarSlider($('#idTienda').val(), filename);
+				result=agregarSlider($('#idTienda').val(), filename,'slidertienda');
 				if(slidersList.length!=0){
 					slider={"IdSlider":result["ID"],"Nombre":filename,"IdTienda":$('#idTienda').val()};
 					slidersList[counter-1]=slider;

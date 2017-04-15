@@ -129,6 +129,22 @@ function obtenSlidersStore(idStore) {
 	}
 }
 
+function obtenLogotipoStore(idStore) {
+	var params = {
+		operations : [{
+			operation : 'select',
+			tableName : 'logotienda',
+			columnNames : 'IdTienda,IdLogo,Nombre',
+			where : 'IdTienda=' + idStore
+		}]
+	};
+	var myJSONText = JSON.stringify(params);
+	var data = execAjax(myJSONText, "POST", "json", ruta+"phpControllers/dbController.php");
+	if (data.length > 0) {
+			$('#logoTienda').append('<img src="images/Logos/' + data[0]["Nombre"] + '" />');
+		}
+	}
+
 function initGallery() {
 	$('#horizontalTab').easyResponsiveTabs({
 		type : 'default', //Types: default, vertical, accordion

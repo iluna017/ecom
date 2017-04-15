@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Clientes</title>
+		<title>Ventas</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<?php
 			include 'header.php';
@@ -37,7 +37,7 @@
 			<input type="hidden" name="TrId" id="TrId">
 			<div class="panelHead">
 				<div style="display:inline-block">
-					<h4>Clientes</h4>
+					<h4>Ventas</h4>
 				</div>
 				<div style="display:inline-block;float:right">
 					<a href="menu.php"><img src="images/return.png" width="40" height="40"></a>
