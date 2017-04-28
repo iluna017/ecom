@@ -1102,17 +1102,23 @@ function getRowsTable(tableName,typeTable,columns){
 	return contentRows;
 }
    
-function pagination(limit,maxLimit){
+function pagination(limitProducts,limitPagination){
 	var pagination=$('#paginator');
-	var pags=limit%maxlimit;
-	var htmlPag='';
-	if(pags>1){
-		htmlPag='<li class="page-item active">'+
+	if((limitProducts+1) > limitPagination){
+		var residue=limitProducts%limitPagination;
+		var pags=limitProducts/limitPagination;
+		if(residue >0){
+			pags+=1;
+		}
+		var htmlPag='';
+		if(pags>1){
+			htmlPag='<li class="page-item active">'+
       			'<a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>'+
     			'</li>';
-    	for(var i=2; i<= limit;i++){
+    	for(var i=2; i<= pags ;i++){
 			htmlPag+='<li class="page-item"><a class="page-link" href="#">'+i+'</a></li>';		
 		}
+		}
+		pagination.append(htmlPag);
 	}
-	pagination.append(htmlPag);
 }
