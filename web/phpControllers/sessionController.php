@@ -26,7 +26,7 @@ if(isset($oper)){
 				$jsondata["MSG"]                  = "Usuario autenticado!!!";
 				$jsondata["SESSION"]["IDSESSION"] = $_SESSION["IDSESSION"];
 				$jsondata["SESSION"]["IDUSER"]    = $_SESSION['IDUSER'];
-				$jsondata["SESSION"]["IDCLIENT"]  = $_SESSION['IDCLIENT'];
+				$jsondata["SESSION"]["IDCLIENT"]  = $_SESSION['USER'];
 			}else{
 				$jsondata["ID"]="-1";$jsondata["ESTATUS"]="-1";
 				$jsondata["MSG"]="Usuario no autenticado!!!";

@@ -219,10 +219,16 @@ function buildProducts(idTienda, jsonS, categories, stickers, attrs,init,limit, 
 	var categorieNum = '';
 	var productNum = '';
 	var imagesProd = getProductImages(idTienda);
-
+	//if(limit > categories.length){
+		//limit=categories.length;
+	//}
 	for (var i = 0; i < categories.length; i++) {
 		if(!pagination){
 			init=0; limit= jsonS[categories[i]].length;
+		}else{
+			if(limit > jsonS[categories[i]].length){
+				limit=jsonS[categories[i]].length;
+			}
 		}		
 		for (var k = init; k < limit; k++) {
 			sticker = stickers[i];
@@ -398,7 +404,6 @@ function loadProducto() {
 		for(var i=0; i< pagination;i++){
 			init=i * maxPagination;
 			limit=(i+1) * maxPagination;
-			alert(init+','+limit);
 			liUl='<li class="page-item"><a class="page-link" href="#" onclick="buildProductsBtn('+init+','+limit+',true)">'+(i+1)+'</a></li>';
 			paginator.append(liUl);		
 		}
@@ -420,30 +425,3 @@ function loadProducto() {
 		jQuery('#'+tabContentTo).show().siblings().hide();
 		
 	}
-	
-function writeCookie(name,value,hours) {
-    var date, expires;
-    if (hours) {
-        date = new Date();
-        date.setTime(date.getTime()+(hours*60*60*1000));
-        expires = "; expires=" + date.toGMTString();
-            }else{
-        expires = "";
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
-}
-
-function readCookie(name) {
-    var i, c, ca, nameEQ = name + "=";
-    ca = document.cookie.split(';');
-    for(i=0;i < ca.length;i++) {
-        c = ca[i];
-        while (c.charAt(0)==' ') {
-            c = c.substring(1,c.length);
-        }
-        if (c.indexOf(nameEQ) == 0) {
-            return c.substring(nameEQ.length,c.length);
-        }
-    }
-    return '';
-}
