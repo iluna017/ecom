@@ -424,4 +424,8 @@ function loadProducto() {
 		// Show/Hide Tabs
 		jQuery('#'+tabContentTo).show().siblings().hide();
 		
+<<<<<<< HEAD
 	}
+=======
+	}
+>>>>>>> branch 'master' of https://github.com/iluna017/ecom
