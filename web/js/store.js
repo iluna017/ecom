@@ -219,9 +219,6 @@ function buildProducts(idTienda, jsonS, categories, stickers, attrs,init,limit, 
 	var categorieNum = '';
 	var productNum = '';
 	var imagesProd = getProductImages(idTienda);
-	//if(limit > categories.length){
-		//limit=categories.length;
-	//}
 	for (var i = 0; i < categories.length; i++) { 
 		if(!pagination){
 			init=0; limit= jsonS[categories[i]].length;
