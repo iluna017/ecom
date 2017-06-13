@@ -6,6 +6,7 @@
  * @param url
  * @returns {String}
  */
+
 function execAjax(params, type, dataType, url){
 	var result;
 	var par={params:params};
